@@ -1,0 +1,1 @@
+document.getElementById("currentOutflow").innerHTML = "191";
