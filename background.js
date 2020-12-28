@@ -2,21 +2,35 @@ setDefaults();
 setLastDischargeFromCSV();
 
 function setDefaults() {
+    chrome.storage.sync.get(['stationId'], function(result) {
+        var stationId = result.stationId;
+        if (stationId == undefined) {
+            chrome.storage.sync.set({
+                stationId: '2018'
+            }, function() {
+                setName('2018');
+                setLastDischargeFromCSV();
+            });
+        }
+    });
+}
+
+function setName(stationId) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "resources/stations.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            var stations = new Array(allTextLines.length);
             for (i = 0; i < allTextLines.length - 1; i++) {
                 var line = allTextLines[i];
                 var splittedLine = line.split(",");
-                stations[splittedLine[0].toString()] = splittedLine[1];
+                if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
+                    chrome.storage.sync.set({
+                        stationName: splittedLine[1].toString()
+                    }, function() {
+                    });
+                }
             }
-            chrome.storage.local.set({
-                stations: stations
-            }, function() {
-            });
         }
     }
     xhr.send(null);
