@@ -2,3 +2,11 @@
     color: red;
     font-weight: bold;
 }
+
+#changeOptions {
+    text-align: right;
+}
+
+body {
+    width: 250px;
+}

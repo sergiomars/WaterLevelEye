@@ -4,9 +4,12 @@
         <title>Water Level Eye</title>
         <link rel="stylesheet" href="styles.css">
     </head>
-    <body>
-        <h2>Current Water Level</h2>
-        <div id="currentOutflow"></div>
+        <h2 id="title">Station</h2>
+        <p>Aktueller Wasserstand [m.&#252;.M.]: <span id="currentLevel"></span></p>
+        <p>Aktueller Abluss [m3/s]: <span id="currentOutflow"></span></p>
+        <p>Aktuelle Temperatur [&#176;C]: <span id="currentTemperature"></span></p>
+        <p>Detailierter Bericht: <a id="detailUrl" target="_blank">Link</a></p>
+        <p id="changeOptions"><a id="optionsUrl" target="_blank">Station wechseln</a></p>
     </body>
     <script src="popup.js"></script>
 </html>
