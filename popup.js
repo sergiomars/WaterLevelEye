@@ -35,8 +35,8 @@ function setLastLevelFromCSV(stationId) {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
             var lastLine = allTextLines[allTextLines.length - 2];
-            var discharge = lastLine.split(",")[1];
-            document.getElementById("currentLevel").innerHTML = Math.round(discharge);
+            var waterLevel = lastLine.split(",")[1];
+            document.getElementById("currentLevel").innerHTML = waterLevel.toFixed(2);
         }
     }
     xhr.send();
@@ -49,8 +49,8 @@ function setLastTemperatureFromCSV(stationId) {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
             var lastLine = allTextLines[allTextLines.length - 2];
-            var discharge = lastLine.split(",")[1];
-            document.getElementById("currentTemperature").innerHTML = Math.round(discharge);
+            var temperature = lastLine.split(",")[1];
+            document.getElementById("currentTemperature").innerHTML = temperature.toFixed(1);
         }
     }
     xhr.send();
