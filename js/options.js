@@ -50,15 +50,13 @@ function setName(stationId) {
     xhr.send(null);
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
-//function restore_options() {
-//  // Use default value color = 'red' and likesColor = true.
-//  chrome.storage.sync.get({
-//    stationId: '2018',
-//  }, function(items) {
-//    document.getElementById('stationId').value = items.stationId;
-//  });
-//}
-//document.addEventListener('DOMContentLoaded', restore_options);
+// Save on click
 document.getElementById('save').addEventListener('click', save_options);
+
+// Click on 'enter'
+var input = document.getElementById("station-list");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    document.getElementById("save").click();
+  }
+});
