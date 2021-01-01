@@ -17,7 +17,7 @@ function setDefaults() {
 
 function setName(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "resources/stations.csv", true);
+    xhr.open("GET", "resources/data/stations.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
