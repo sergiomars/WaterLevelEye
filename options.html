@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <head><title>Water Level Eye Options</title></head>
+    <head>
+        <title>Water Level Eye Options</title>
+        <link rel="stylesheet" href="./css/options.css">
+    </head>
     <body>
-
+        <h1><img src="resources/images/icon.png"> Water Level Eye Options</h1>
         <div class="search-list">
-            <label for="station-list" class="control-label">Station ausw&#228;hlen</label><br>
+            <label for="station-list" class="control-label">Station ausw&#228;hlen: </label>
             <select name="station-list" id="station-list" class="search-list-dropdown form-control">
                 <option value="2416">Aabach - Hitzkirch, Richensee ( 2416 )</option>
                 <option value="2312">Aach - Salmsach, Hungerb&#252;hl ( 2312 )</option>
@@ -359,6 +362,11 @@
                 <option value="2014">Z&#252;richsee (Obersee) - Schmerikon ( 2014 )</option>
                 <option value="2209">Z&#252;richsee - Z&#252;rich ( 2209 )</option>
             </select>
+        </div>
+
+        <div>
+            <label for="discharge-limit" class="control-label">Durchflusslimit: </label>
+            <input id="discharge-limit">
         </div>
 
         <div id="status"></div>

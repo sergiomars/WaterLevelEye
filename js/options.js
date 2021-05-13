@@ -1,10 +1,12 @@
 // Saves options to chrome.storage
 function save_options() {
   var stationId = document.getElementById('station-list').value;
-  setLastDischargeFromCSV(stationId);
+  var dischargeLimit = document.getElementById('discharge-limit').value;
+  setLastDischargeFromCSV(stationId, dischargeLimit);
   setName(stationId);
   chrome.storage.sync.set({
-    stationId: stationId
+    stationId: stationId,
+    dischargeLimit: dischargeLimit
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -15,15 +17,17 @@ function save_options() {
   });
 }
 
-function setLastDischargeFromCSV(stationId) {
+function setLastDischargeFromCSV(stationId, dischargeLimit) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/discharge_" + stationId + ".csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
             var lastLine = allTextLines[allTextLines.length - 2];
-            var discharge = Math.round(lastLine.split(",")[1]).toString();
-            chrome.browserAction.setBadgeText({text: discharge});
+            var discharge = Math.round(lastLine.split(",")[1]);
+            chrome.browserAction.setBadgeText({text: discharge.toString()});
+            var bgColor = (dischargeLimit != "" && discharge > dischargeLimit) ? "green": "blue";
+            chrome.browserAction.setBadgeBackgroundColor({color: bgColor});
         }
     }
     xhr.send();
