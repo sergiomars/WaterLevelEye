@@ -1,3 +1,10 @@
+// set stored values
+chrome.storage.sync.get(['stationId', 'dischargeLimit'], function(result) {
+    document.getElementById('discharge-limit').setAttribute("value", result.dischargeLimit);
+    document.getElementById('station-list').value = result.stationId;
+});
+
+
 // Saves options to chrome.storage
 function save_options() {
   var stationId = document.getElementById('station-list').value;
@@ -58,9 +65,13 @@ function setName(stationId) {
 document.getElementById('save').addEventListener('click', save_options);
 
 // Click on 'enter'
-var input = document.getElementById("station-list");
-input.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    document.getElementById("save").click();
-  }
-});
+setClickEventListener("station-list");
+setClickEventListener("discharge-limit");
+function setClickEventListener(elementId){
+    var input = document.getElementById(elementId);
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        document.getElementById("save").click();
+      }
+    });
+}
