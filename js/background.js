@@ -41,10 +41,11 @@ function timer(){
 }
 
 function setLastDischargeFromCSV() {
-    chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled'], function(result) {
+    chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled', 'notificationDate'], function(result) {
         var stationId = result.stationId;
         var dischargeLimit = result.dischargeLimit;
         var notificationEnabled = result.notificationEnabled;
+        var notificationDate = result.notificationDate;
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/discharge_" + stationId + ".csv", true);
         xhr.onreadystatechange = function() {
@@ -56,8 +57,13 @@ function setLastDischargeFromCSV() {
                 var isAboveLimit = dischargeLimit != "" && discharge > dischargeLimit;
                 var bgColor = isAboveLimit ? "green": "blue";
                 chrome.browserAction.setBadgeBackgroundColor({color: bgColor});
-                if (notificationEnabled && isAboveLimit) {
+                if (notificationEnabled && isAboveLimit && (notificationDate == undefined || notificationDate < getTodayDate())) {
                     alertWithNotification(discharge);
+                } else if (!isAboveLimit && notificationDate != undefined){
+                    chrome.storage.sync.set({
+                        notificationDate: undefined
+                    }, function() {
+                    });
                 }
                 timer();
             }
@@ -76,4 +82,12 @@ function alertWithNotification(discharge){
           type: 'basic'
         }
     );
+    chrome.storage.sync.set({
+        notificationDate: getTodayDate()
+    }, function() {
+    });
+}
+
+function getTodayDate() {
+   return new Date().setHours(0,0,0,0);
 }
