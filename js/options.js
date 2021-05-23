@@ -1,7 +1,8 @@
 // set stored values
-chrome.storage.sync.get(['stationId', 'dischargeLimit'], function(result) {
+chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled'], function(result) {
     document.getElementById('discharge-limit').setAttribute("value", result.dischargeLimit);
     document.getElementById('station-list').value = result.stationId;
+    document.getElementById('notification-enabled').checked = result.notificationEnabled;
 });
 
 
@@ -9,11 +10,13 @@ chrome.storage.sync.get(['stationId', 'dischargeLimit'], function(result) {
 function save_options() {
   var stationId = document.getElementById('station-list').value;
   var dischargeLimit = document.getElementById('discharge-limit').value;
-  setLastDischargeFromCSV(stationId, dischargeLimit);
+  var notificationEnabled = document.getElementById('notification-enabled').checked;
+  setLastDischargeFromCSV(stationId, dischargeLimit, notificationEnabled);
   setName(stationId);
   chrome.storage.sync.set({
     stationId: stationId,
-    dischargeLimit: dischargeLimit
+    dischargeLimit: dischargeLimit,
+    notificationEnabled: notificationEnabled
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -67,6 +70,7 @@ document.getElementById('save').addEventListener('click', save_options);
 // Click on 'enter'
 setClickEventListener("station-list");
 setClickEventListener("discharge-limit");
+setClickEventListener("notification-enabled");
 function setClickEventListener(elementId){
     var input = document.getElementById(elementId);
     input.addEventListener("keyup", function(event) {

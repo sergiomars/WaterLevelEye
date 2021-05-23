@@ -17,6 +17,7 @@
   },
   "permissions": [
     "https://www.hydrodaten.admin.ch/",
-    "storage"
+    "storage",
+    "notifications"
   ]
 }
