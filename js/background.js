@@ -61,7 +61,7 @@ function setLastDischargeFromCSV() {
                     alertWithNotification(discharge);
                 } else if (!isAboveLimit && notificationDate != undefined){
                     chrome.storage.sync.set({
-                        notificationDate: undefined
+                        notificationDate: null
                     }, function() {
                     });
                 }

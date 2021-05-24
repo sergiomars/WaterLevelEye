@@ -25,6 +25,11 @@ function save_options() {
       status.textContent = '';
     }, 750);
   });
+  if (!notificationEnabled) {
+    chrome.storage.sync.set({
+       notificationDate: null
+     }, function() { });
+  }
 }
 
 function setLastDischargeFromCSV(stationId, dischargeLimit) {

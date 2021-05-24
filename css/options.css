@@ -10,6 +10,35 @@ html {
     background-color: LightCyan;
 }
 
+h1 {
+    padding-bottom: 20px
+}
+
 body {
     display: table-cell;
+}
+
+label{
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: 250px;
+    text-align: left;
+}
+
+input {
+    display: inline-block;
+    float: left;
+}
+
+#frame {
+    border: 1px;
+    border-color: darkblue;
+    border-style: solid;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+#save {
+    float: right;
 }
