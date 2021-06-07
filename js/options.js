@@ -34,7 +34,7 @@ function save_options() {
 
 function setLastDischargeFromCSV(stationId, dischargeLimit) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/discharge_" + stationId + ".csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_AbflussPneumatik.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);

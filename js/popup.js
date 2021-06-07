@@ -30,7 +30,7 @@ function setOptionsLink(stationId) {
 
 function setLastLevelFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/level_" + stationId + ".csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_PegelPneumatik.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
@@ -44,7 +44,7 @@ function setLastLevelFromCSV(stationId) {
 
 function setLastTemperatureFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/temperature_" + stationId + ".csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_Wassertemperatur1.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
@@ -58,7 +58,7 @@ function setLastTemperatureFromCSV(stationId) {
 
 function setLastDischargeFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/graphs/" + stationId + "/discharge_" + stationId + ".csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_AbflussPneumatik.csv", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             var allTextLines = xhr.responseText.split(/\r\n|\n/);
