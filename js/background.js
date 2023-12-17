@@ -47,12 +47,12 @@ function setLastDischargeFromCSV() {
         var notificationEnabled = result.notificationEnabled;
         var notificationDate = result.notificationDate;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_AbflussPneumatik.csv", true);
+        xhr.open("GET", "https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json", true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
-                var allTextLines = xhr.responseText.split(/\r\n|\n/);
-                var lastLine = allTextLines[allTextLines.length - 2];
-                var discharge = Math.round(lastLine.split(",")[1]);
+                const jsonResponse = JSON.parse(xhr.responseText);
+                var lastValue = jsonResponse.plot.data[1].y[2002];
+                var discharge = Math.round(lastValue);
                 chrome.browserAction.setBadgeText({text: discharge.toString()});
                 var isAboveLimit = dischargeLimit != "" && discharge > dischargeLimit;
                 var bgColor = isAboveLimit ? "green": "blue";

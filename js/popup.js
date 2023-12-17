@@ -30,12 +30,12 @@ function setOptionsLink(stationId) {
 
 function setLastLevelFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_PegelPneumatik.csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
-            var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            var lastLine = allTextLines[allTextLines.length - 2];
-            var waterLevel = lastLine.split(",")[1];
+            const jsonResponse = JSON.parse(xhr.responseText);
+            var lastValue = jsonResponse.plot.data[0].y[2002];
+            var waterLevel = Math.round(lastValue);
             document.getElementById("currentLevel").innerHTML = parseFloat(waterLevel).toFixed(2);
         }
     }
@@ -44,12 +44,12 @@ function setLastLevelFromCSV(stationId) {
 
 function setLastTemperatureFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_Wassertemperatur1.csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/plots/temperature_7days/" + stationId + "_temperature_7days_de.json", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
-            var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            var lastLine = allTextLines[allTextLines.length - 2];
-            var temperature = lastLine.split(",")[1];
+            const jsonResponse = JSON.parse(xhr.responseText);
+            var lastValue = jsonResponse.plot.data[0].y[1003];
+            var temperature = Math.round(lastValue);
             document.getElementById("currentTemperature").innerHTML = parseFloat(temperature).toFixed(1);
         }
     }
@@ -58,12 +58,12 @@ function setLastTemperatureFromCSV(stationId) {
 
 function setLastDischargeFromCSV(stationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_AbflussPneumatik.csv", true);
+    xhr.open("GET", "https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json", true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
-            var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            var lastLine = allTextLines[allTextLines.length - 2];
-            var discharge = lastLine.split(",")[1];
+            const jsonResponse = JSON.parse(xhr.responseText);
+            var lastValue = jsonResponse.plot.data[1].y[2002];
+            var discharge = Math.round(lastValue);
             document.getElementById("currentOutflow").innerHTML = Math.round(discharge);
         }
     }
