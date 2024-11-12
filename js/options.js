@@ -1,5 +1,5 @@
 // set stored values
-chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled'], function(result) {
+chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled'], function (result) {
     document.getElementById('discharge-limit').setAttribute("value", result.dischargeLimit);
     document.getElementById('station-list').value = result.stationId;
     document.getElementById('notification-enabled').checked = result.notificationEnabled;
@@ -8,65 +8,55 @@ chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled'], 
 
 // Saves options to chrome.storage
 function save_options() {
-  var stationId = document.getElementById('station-list').value;
-  var dischargeLimit = document.getElementById('discharge-limit').value;
-  var notificationEnabled = document.getElementById('notification-enabled').checked;
-  setLastDischargeFromCSV(stationId, dischargeLimit, notificationEnabled);
-  setName(stationId);
-  chrome.storage.sync.set({
-    stationId: stationId,
-    dischargeLimit: dischargeLimit,
-    notificationEnabled: notificationEnabled
-  }, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 750);
-  });
-  if (!notificationEnabled) {
+    const stationId = document.getElementById('station-list').value;
+    const dischargeLimit = document.getElementById('discharge-limit').value;
+    const notificationEnabled = document.getElementById('notification-enabled').checked;
+    setLastDischarge(stationId, dischargeLimit, notificationEnabled);
+    setName(stationId);
     chrome.storage.sync.set({
-       notificationDate: null
-     }, function() { });
-  }
+        stationId: stationId,
+        dischargeLimit: dischargeLimit,
+        notificationEnabled: notificationEnabled
+    }, function () {
+        // Update status to let user know options were saved.
+        let status = document.getElementById('status');
+        status.textContent = 'Options saved.';
+        setTimeout(function () {
+            status.textContent = '';
+        }, 750);
+    });
+    if (!notificationEnabled) {
+        chrome.storage.sync.set({
+            notificationDate: null
+        }, function () {
+        });
+    }
 }
 
-function setLastDischargeFromCSV(stationId, dischargeLimit) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://www.hydrodaten.admin.ch/lhg/az/dwh/csv/BAFU_" + stationId + "_AbflussPneumatik.csv", true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            var lastLine = allTextLines[allTextLines.length - 2];
-            var discharge = Math.round(lastLine.split(",")[1]);
-            chrome.browserAction.setBadgeText({text: discharge.toString()});
-            var bgColor = (dischargeLimit != "" && discharge > dischargeLimit) ? "green": "blue";
-            chrome.browserAction.setBadgeBackgroundColor({color: bgColor});
-        }
-    }
-    xhr.send();
+async function setLastDischarge(stationId, dischargeLimit) {
+    const response = await fetch("https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json");
+    const jsonResponse = await response.json();
+    const lastValue = jsonResponse.plot.data[1].y[jsonResponse.plot.data[1].y.length - 1];
+    const discharge = Math.round(lastValue);
+    chrome.action.setBadgeText({text: discharge.toString()});
+    const bgColor = (dischargeLimit != "" && discharge > dischargeLimit) ? "green" : "blue";
+    chrome.action.setBadgeBackgroundColor({color: bgColor});
 }
 
-function setName(stationId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "resources/data/stations.csv", true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            var allTextLines = xhr.responseText.split(/\r\n|\n/);
-            for (i = 0; i < allTextLines.length - 1; i++) {
-                var line = allTextLines[i];
-                var splittedLine = line.split(",");
-                if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
-                    chrome.storage.sync.set({
-                        stationName: splittedLine[1].toString()
-                    }, function() {
-                    });
-                }
-            }
+async function setName(stationId) {
+    const response = await fetch("resources/data/stations.csv");
+    const csv = await response.text();
+    const allTextLines = csv.split(/\r\n|\n/);
+    for (i = 0; i < allTextLines.length - 1; i++) {
+        const line = allTextLines[i];
+        const splittedLine = line.split(",");
+        if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
+            chrome.storage.sync.set({
+                stationName: splittedLine[1].toString()
+            }, function () {
+            });
         }
     }
-    xhr.send(null);
 }
 
 // Save on click
@@ -76,11 +66,12 @@ document.getElementById('save').addEventListener('click', save_options);
 setClickEventListener("station-list");
 setClickEventListener("discharge-limit");
 setClickEventListener("notification-enabled");
-function setClickEventListener(elementId){
-    var input = document.getElementById(elementId);
-    input.addEventListener("keyup", function(event) {
-      if (event.keyCode === 13) {
-        document.getElementById("save").click();
-      }
+
+function setClickEventListener(elementId) {
+    let input = document.getElementById(elementId);
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            document.getElementById("save").click();
+        }
     });
 }
