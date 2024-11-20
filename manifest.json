@@ -12,7 +12,8 @@
     "open_in_tab": true
   },
   "background": {
-    "service_worker": "js/background.js"
+    "service_worker": "js/background.js",
+    "type": "module"
   },
   "host_permissions": [
     "https://www.hydrodaten.admin.ch/"

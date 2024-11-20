@@ -1,3 +1,5 @@
+import {getLastValueOfTimeSeries, TIME_SERIES_NAME} from "./service.js";
+
 setOptionsLink();
 
 chrome.storage.sync.get(['stationId'], function (result) {
@@ -29,25 +31,16 @@ function setOptionsLink(stationId) {
 }
 
 async function setLastLevel(stationId) {
-    const response = await fetch("https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json");
-    const jsonResponse = await response.json();
-    var lastValue = jsonResponse.plot.data[0].y[jsonResponse.plot.data[1].y.length - 1];
-    const waterLevel = Math.round(lastValue);
+    const waterLevel = await getLastValueOfTimeSeries(TIME_SERIES_NAME.LEVEL, stationId);
     document.getElementById("currentLevel").innerHTML = parseFloat(waterLevel).toFixed(2);
 }
 
 async function setLastTemperature(stationId) {
-    const response = await fetch("https://www.hydrodaten.admin.ch/plots/temperature_7days/" + stationId + "_temperature_7days_de.json");
-    const jsonResponse = await response.json();
-    var lastValue = jsonResponse.plot.data[0].y[jsonResponse.plot.data[0].y.length - 1];
-    const temperature = Math.round(lastValue);
+    const temperature = await getLastValueOfTimeSeries(TIME_SERIES_NAME.TEMPERATURE, stationId);
     document.getElementById("currentTemperature").innerHTML = parseFloat(temperature).toFixed(1);
 }
 
 async function setLastDischarge(stationId) {
-    const response = await fetch("https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json");
-    const jsonResponse = await response.json();
-    const lastValue = jsonResponse.plot.data[1].y[jsonResponse.plot.data[1].y.length - 1];
-    const discharge = Math.round(lastValue);
+    const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
     document.getElementById("currentOutflow").innerHTML = Math.round(discharge);
 }

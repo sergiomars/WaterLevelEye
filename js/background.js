@@ -1,3 +1,6 @@
+import {getLastValueOfTimeSeries} from "./service.js";
+import {TIME_SERIES_NAME} from "./service.js";
+
 setDefaults();
 setLastDischarge();
 
@@ -19,7 +22,7 @@ async function setName(stationId) {
     const response = await fetch("resources/data/stations.csv");
     const csv = await response.text();
     const allTextLines = csv.split(/\r\n|\n/);
-    for (i = 0; i < allTextLines.length - 1; i++) {
+    for (let i = 0; i < allTextLines.length - 1; i++) {
         const line = allTextLines[i];
         const splittedLine = line.split(",");
         if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
@@ -41,11 +44,8 @@ async function setLastDischarge() {
         const dischargeLimit = result.dischargeLimit;
         const notificationEnabled = result.notificationEnabled;
         const notificationDate = result.notificationDate;
-        const response = await fetch("https://www.hydrodaten.admin.ch/plots/p_q_7days/" + stationId + "_p_q_7days_de.json");
-        const jsonResponse = await response.json();
-        const lastValue = jsonResponse.plot.data[1].y[jsonResponse.plot.data[1].y.length - 1];
-        const discharge = Math.round(lastValue);
 
+        const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
         chrome.action.setBadgeText({text: discharge.toString()});
 
         const isAboveLimit = dischargeLimit != "" && discharge > dischargeLimit;
