@@ -1,3 +1,4 @@
+debugger;
 import {getLastValueOfTimeSeries, TIME_SERIES_NAME} from "./service.js";
 
 setOptionsLink();
@@ -10,14 +11,23 @@ chrome.storage.sync.get(['stationId'], function (result) {
     setLastDischarge(stationId);
 });
 
-chrome.storage.sync.get(['stationName'], function (result) {
+chrome.storage.sync.get(['stationName', 'xCoordinate', 'yCoordinate'], function (result) {
     const stationName = result.stationName;
     setTitle(stationName);
+    const xCoordinate = result.xCoordinate;
+    const yCoordinate = result.yCoordinate;
+    setMapSrc(xCoordinate, yCoordinate);
 });
-
 
 function setTitle(stationName) {
     document.getElementById("title").innerHTML = stationName;
+}
+
+
+function setMapSrc(xCoordinate, yCoordinate) {
+    let map = document.getElementById("map");
+    const mapIframe = "<iframe src=\"https://map.geo.admin.ch/#/embed?lang=de&center=" + xCoordinate + "," + yCoordinate + "&z=7&bgLayer=ch.swisstopo.pixelkarte-farbe&topic=ech&crosshair=bowl&layers=\" style=\"border: 0;width: 600px;height: 400px;max-width: 100%;max-height: 100%;\" allow=\"geolocation\"></iframe>";
+    map.innerHTML = mapIframe;
 }
 
 function setDetailLink(stationId) {

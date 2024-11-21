@@ -5,16 +5,16 @@ export const TIME_SERIES_NAME = {
 }
 
 export async function getLastValueOfTimeSeries(timeSeriesName, stationId) {
-    const response = await fetch(getUrl(timeSeriesName, stationId));
+    const response = await fetch(getTimeSeriesUrl(timeSeriesName, stationId));
     const jsonResponse = await response.json();
     const timeSeries = jsonResponse.plot.data.filter(function (el) {
-        return el.name == timeSeriesName
+        return el.name === timeSeriesName
     })[0];
     const lastValue = timeSeries.y[timeSeries.y.length - 1];
     return Math.round(lastValue);
 }
 
-function getUrl(timeSeriesName, stationId) {
+function getTimeSeriesUrl(timeSeriesName, stationId) {
     const basePlotUrl = "https://www.hydrodaten.admin.ch/plots";
     let url = basePlotUrl;
     switch (timeSeriesName) {
@@ -27,4 +27,24 @@ function getUrl(timeSeriesName, stationId) {
             break;
     }
     return url;
+}
+
+export async function getStationProperties(stationId) {
+    const response = await fetch("resources/data/stations.csv");
+    const csv = await response.text();
+    const allTextLines = csv.split(/\r\n|\n/);
+    for (let i = 0; i < allTextLines.length - 1; i++) {
+        const line = allTextLines[i];
+        const splittedLine = line.split("|");
+        if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
+            const xCoordinate = splittedLine[2].toString();
+            const yCoordinate = splittedLine[3].toString();
+            const stationName = splittedLine[1].toString();
+            return {
+                "stationName": stationName,
+                "xCoordinate": xCoordinate,
+                "yCoordinate": yCoordinate
+            }
+        }
+    }
 }

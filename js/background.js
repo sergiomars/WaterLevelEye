@@ -24,10 +24,12 @@ async function setName(stationId) {
     const allTextLines = csv.split(/\r\n|\n/);
     for (let i = 0; i < allTextLines.length - 1; i++) {
         const line = allTextLines[i];
-        const splittedLine = line.split(",");
+        const splittedLine = line.split("|");
         if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
             chrome.storage.sync.set({
-                stationName: splittedLine[1].toString()
+                stationName: splittedLine[1].toString(),
+                xCoordinate: splittedLine[2].toString(),
+                yCoordinate: splittedLine[3].toString()
             }, function () {
             });
         }
