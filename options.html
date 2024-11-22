@@ -253,37 +253,34 @@
                             <option value="2014">Z&#252;richsee (Obersee) - Schmerikon ( 2014 )</option>
                             <option value="2209">Z&#252;richsee - Z&#252;rich ( 2209 )</option>
                         </select>
+                        <p>
+                            <label for="discharge-limit" class="control-label">Durchflusslimit: </label>
+                            <input id="discharge-limit">
+                            <br>
+                            <label for="notification-enabled" class="control-label">Chrome-Benachrichtigung, wenn Durchfluss &#252;ber Limit ist: </label>
+                            <input id="notification-enabled" type="checkbox">
+                            <br>
+                        </p>
+                        <br>
+                        <br>
+                        <br>
+                        <p>
+                            <div id="status"></div>
+                            <button id="save">Save</button>
+                        </p>
+                    </td>
+                    <td>
+                        <img id="station-image" src="https://www.hydrodaten.admin.ch/documents/Stationsbilder/P2018.png">
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <label for="discharge-limit" class="control-label">Durchflusslimit: </label>
-                        <input id="discharge-limit">
                     </td>
                 </tr>
 
                 <tr>
-                    <td>
-                        <label for="notification-enabled" class="control-label">Chrome-Benachrichtigung, wenn Durchfluss &#252;ber Limit ist: </label>
-                        <input id="notification-enabled" type="checkbox">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div id="status"></div>
-                        <button id="save">Save</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
+                    <td colspan="2">
                         <div id="map"></div>
                     </td>
                 </tr>

@@ -47,12 +47,18 @@ export async function updateMap() {
     const selectedStationId = document.getElementById("station-list").value;
     const stationProperties = await getStationProperties(selectedStationId);
     setMapSrc(stationProperties.xCoordinate, stationProperties.yCoordinate);
+    setImgSrc(selectedStationId);
 }
 
 function setMapSrc(xCoordinate, yCoordinate) {
     let map = document.getElementById("map");
     const mapIframe = "<iframe src=\"https://map.geo.admin.ch/#/embed?lang=de&center=" + xCoordinate + "," + yCoordinate + "&z=7&bgLayer=ch.swisstopo.pixelkarte-farbe&topic=ech&crosshair=bowl&layers=\" style=\"border: 0;width: 800px;height: 400px;max-width: 100%;max-height: 100%;\" allow=\"geolocation\"></iframe>";
     map.innerHTML = mapIframe;
+}
+
+function setImgSrc(stationId) {
+    let img = document.getElementById("station-image");
+    img.src = "https://www.hydrodaten.admin.ch/documents/Stationsbilder/P" + stationId + ".png";
 }
 
 async function setLastDischarge(stationId, dischargeLimit) {

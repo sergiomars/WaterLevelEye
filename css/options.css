@@ -22,7 +22,7 @@ label{
     display: inline-block;
     float: left;
     clear: left;
-    width: 250px;
+    width: 100px;
     text-align: left;
 }
 
@@ -39,8 +39,8 @@ input {
     padding: 15px;
 }
 
-#save {
-    float: right;
+#station-image {
+    width: 250px;
 }
 
 #status {

@@ -6,12 +6,18 @@ export const TIME_SERIES_NAME = {
 
 export async function getLastValueOfTimeSeries(timeSeriesName, stationId) {
     const response = await fetch(getTimeSeriesUrl(timeSeriesName, stationId));
-    const jsonResponse = await response.json();
-    const timeSeries = jsonResponse.plot.data.filter(function (el) {
-        return el.name === timeSeriesName
-    })[0];
-    const lastValue = timeSeries.y[timeSeries.y.length - 1];
-    return Math.round(lastValue);
+    if (response.ok) {
+
+        const jsonResponse = await response.json();
+        const timeSeries = jsonResponse.plot.data.filter(function (el) {
+            return el.name === timeSeriesName
+        })[0];
+        const lastValue = timeSeries.y[timeSeries.y.length - 1];
+        return Math.round(lastValue);
+    } else {
+        console.log("no " + timeSeriesName.valueOf() + " for station " + stationId);
+        return null;
+    }
 }
 
 function getTimeSeriesUrl(timeSeriesName, stationId) {
