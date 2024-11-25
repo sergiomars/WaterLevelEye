@@ -2,7 +2,7 @@ import {getLastValueOfTimeSeries, getStationProperties, TIME_SERIES_NAME} from "
 
 // set stored values
 chrome.storage.sync.get(['stationId', 'dischargeLimit', 'notificationEnabled', 'xCoordinate', 'yCoordinate'], function (result) {
-    document.getElementById('discharge-limit').setAttribute("value", result.dischargeLimit);
+    document.getElementById('discharge-limit').setAttribute("value", result.dischargeLimit === undefined ? "" : result.dischargeLimit);
     document.getElementById('station-list').value = result.stationId;
     document.getElementById('notification-enabled').checked = result.notificationEnabled;
     setMapSrc(result.xCoordinate, result.yCoordinate);
