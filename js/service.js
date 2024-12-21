@@ -7,7 +7,6 @@ export const TIME_SERIES_NAME = {
 export async function getLastValueOfTimeSeries(timeSeriesName, stationId) {
     const response = await fetch(getTimeSeriesUrl(timeSeriesName, stationId));
     if (response.ok) {
-
         const jsonResponse = await response.json();
         const timeSeries = jsonResponse.plot.data.filter(function (el) {
             return el.name === timeSeriesName
@@ -43,9 +42,9 @@ export async function getStationProperties(stationId) {
         const line = allTextLines[i];
         const splittedLine = line.split("|");
         if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
+            const stationName = splittedLine[1].toString();
             const xCoordinate = splittedLine[2].toString();
             const yCoordinate = splittedLine[3].toString();
-            const stationName = splittedLine[1].toString();
             return {
                 "stationName": stationName,
                 "xCoordinate": xCoordinate,

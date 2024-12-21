@@ -1,39 +1,22 @@
-import {getLastValueOfTimeSeries} from "./service.js";
-import {TIME_SERIES_NAME} from "./service.js";
+import {getLastValueOfTimeSeries, TIME_SERIES_NAME} from "./service.js";
 
 setDefaults();
-setLastDischarge();
 
-function setDefaults() {
-    chrome.storage.sync.get(['stationId'], function (result) {
-        const stationId = result.stationId;
-        if (stationId == undefined) {
+async function setDefaults() {
+    chrome.storage.sync.get(['stationId'], async function (result) {
+        if (result.stationId === undefined) {
             chrome.storage.sync.set({
-                stationId: '2018'
-            }, function () {
-                setName('2018');
-                setLastDischarge();
+                stationId: "2018",
+                stationName: "Reuss - Mellingen",
+                xCoordinate: "2662835",
+                yCoordinate: "1252577",
+                dischargeLimit: null,
+                notificationEnabled: false
+            }, async function () {
+                await setLastDischarge();
             });
         }
     });
-}
-
-async function setName(stationId) {
-    const response = await fetch("resources/data/stations.csv");
-    const csv = await response.text();
-    const allTextLines = csv.split(/\r\n|\n/);
-    for (let i = 0; i < allTextLines.length - 1; i++) {
-        const line = allTextLines[i];
-        const splittedLine = line.split("|");
-        if (splittedLine[0].toString().valueOf() == stationId.valueOf()) {
-            chrome.storage.sync.set({
-                stationName: splittedLine[1].toString(),
-                xCoordinate: splittedLine[2].toString(),
-                yCoordinate: splittedLine[3].toString()
-            }, function () {
-            });
-        }
-    }
 }
 
 function timer() {
