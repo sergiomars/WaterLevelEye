@@ -15,6 +15,8 @@ async function setDefaults() {
             }, async function () {
                 await setLastDischarge();
             });
+        } else {
+            await setLastDischarge();
         }
     });
 }
@@ -59,7 +61,7 @@ function alertWithNotification(discharge) {
             type: 'basic'
         }
     );
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         notificationDate: getTodayDate()
     }, function () {
     });
@@ -68,3 +70,7 @@ function alertWithNotification(discharge) {
 function getTodayDate() {
     return new Date().setHours(0, 0, 0, 0);
 }
+
+chrome.runtime.onStartup.addListener( () => {
+    setDefaults();
+});
