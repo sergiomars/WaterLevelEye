@@ -1,4 +1,4 @@
-# WaterLevelEye
+# ![](resources/images/icon.png) WaterLevelEye
 This is a chrome extension that shows the following data of a certain measuring station:
 - **Water Level** (meters above sea level)
 - **Outflow** (in cubic meters per second)
