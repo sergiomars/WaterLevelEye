@@ -5,8 +5,10 @@ export const TIME_SERIES_NAME = {
 }
 
 export async function getLastValueOfTimeSeries(timeSeriesName, stationId) {
-    const response = await fetch(getTimeSeriesUrl(timeSeriesName, stationId));
-    if (response.ok) {
+    const response = await fetch(getTimeSeriesUrl(timeSeriesName, stationId)).catch((error) => {
+        console.log(error)
+    });
+    if (response != null && response.ok) {
         const jsonResponse = await response.json();
         const timeSeries = jsonResponse.plot.data.filter(function (el) {
             return el.name === timeSeriesName

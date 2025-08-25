@@ -22,7 +22,7 @@ async function setDefaults() {
 }
 
 function timer() {
-    setTimeout(setLastDischarge, 60000);
+    setTimeout(setLastDischarge, 5000);
 }
 
 async function setLastDischarge() {
@@ -33,7 +33,7 @@ async function setLastDischarge() {
         const notificationDate = result.notificationDate;
 
         const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
-        chrome.action.setBadgeText({text: discharge.toString()});
+        chrome.action.setBadgeText({text: discharge == null ? "N/A" : discharge.toString()});
 
         const isAboveLimit = dischargeLimit != "" && discharge > dischargeLimit;
         const bgColor = isAboveLimit ? "green" : "blue";
@@ -70,3 +70,7 @@ function alertWithNotification(discharge) {
 function getTodayDate() {
     return new Date().setHours(0, 0, 0, 0);
 }
+
+chrome.runtime.onStartup.addListener( () => {
+    setDefaults();
+});

@@ -63,7 +63,7 @@ function setImgSrc(stationId) {
 
 async function setLastDischarge(stationId, dischargeLimit) {
     const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
-    chrome.action.setBadgeText({text: discharge.toString()});
+    chrome.action.setBadgeText({text: discharge == null ? "N/A" : discharge.toString()});
     const bgColor = (dischargeLimit != "" && discharge > dischargeLimit) ? "green" : "blue";
     chrome.action.setBadgeBackgroundColor({color: bgColor});
 }

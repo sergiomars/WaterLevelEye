@@ -42,15 +42,15 @@ function setOptionsLink(stationId) {
 
 async function setLastLevel(stationId) {
     const waterLevel = await getLastValueOfTimeSeries(TIME_SERIES_NAME.LEVEL, stationId);
-    document.getElementById("currentLevel").innerHTML = parseFloat(waterLevel).toFixed(2);
+    document.getElementById("currentLevel").innerHTML = waterLevel == null ? "N/A" : parseFloat(waterLevel).toFixed(2);
 }
 
 async function setLastTemperature(stationId) {
     const temperature = await getLastValueOfTimeSeries(TIME_SERIES_NAME.TEMPERATURE, stationId);
-    document.getElementById("currentTemperature").innerHTML = parseFloat(temperature).toFixed(1);
+    document.getElementById("currentTemperature").innerHTML = temperature == null ? "N/A" : parseFloat(temperature).toFixed(1);
 }
 
 async function setLastDischarge(stationId) {
     const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
-    document.getElementById("currentOutflow").innerHTML = Math.round(discharge);
+    document.getElementById("currentOutflow").innerHTML = discharge == null ? "N/A" : Math.round(discharge);
 }
