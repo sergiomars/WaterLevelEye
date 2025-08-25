@@ -70,7 +70,3 @@ function alertWithNotification(discharge) {
 function getTodayDate() {
     return new Date().setHours(0, 0, 0, 0);
 }
-
-chrome.runtime.onStartup.addListener( () => {
-    setDefaults();
-});
