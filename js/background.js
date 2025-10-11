@@ -74,3 +74,16 @@ function getTodayDate() {
 chrome.runtime.onStartup.addListener( () => {
     setDefaults();
 });
+
+// Wird einmal beim Installieren gesetzt
+chrome.runtime.onInstalled.addListener(() => {
+  // Alle 4,9 Minuten wecken (maximal erlaubt ist 5 Minuten)
+  chrome.alarms.create("keepAlive", { periodInMinutes: 4.9 });
+});
+
+// Wenn der Alarm auslöst → Worker wird geweckt
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "keepAlive") {
+    console.log("Wake up Service Worker:", new Date().toLocaleTimeString());
+  }
+});
