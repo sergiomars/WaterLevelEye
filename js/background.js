@@ -35,7 +35,7 @@ async function setLastDischarge() {
         const discharge = await getLastValueOfTimeSeries(TIME_SERIES_NAME.DISCHARGE, stationId);
         chrome.action.setBadgeText({text: discharge == null ? "N/A" : discharge.toString()});
 
-        const isAboveLimit = dischargeLimit != "" && discharge > dischargeLimit;
+        const isAboveLimit = dischargeLimit != null && dischargeLimit !== "" && discharge > Number(dischargeLimit);
         const bgColor = isAboveLimit ? "green" : "blue";
         chrome.action.setBadgeBackgroundColor({color: bgColor});
 
@@ -71,8 +71,17 @@ function getTodayDate() {
     return new Date().setHours(0, 0, 0, 0);
 }
 
+function ensureKeepAliveAlarm() {
+  chrome.alarms.get("keepAlive", (alarm) => {
+    if (!alarm) {
+      chrome.alarms.create("keepAlive", { periodInMinutes: 4.9 });
+    }
+  });
+}
+
 chrome.runtime.onStartup.addListener( () => {
     setDefaults();
+    ensureKeepAliveAlarm();
 });
 
 // Wird einmal beim Installieren gesetzt
@@ -85,5 +94,6 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "keepAlive") {
     console.log("Wake up Service Worker:", new Date().toLocaleTimeString());
+    setLastDischarge();
   }
 });
